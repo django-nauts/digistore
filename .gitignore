@@ -1,0 +1,13 @@
+bin/
+db.sqlite3
+lib/
+manage.py
+pyvenv.cfg
+__init__.py
+__pycache__
+.idea
+venv
+/migrations/
+
+# images
+media/
