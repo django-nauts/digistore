@@ -1,0 +1,63 @@
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Molla - Bootstrap eCommerce Template</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Molla - Bootstrap eCommerce Template">
+    <meta name="author" content="p-themes">
+
+    {% include 'shared/header_ref.html' %}
+
+    {% block title %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+<div class="page-wrapper">
+
+    {% block header_component %}
+    {% include 'shared/header_component.html' %}
+    {% endblock %}
+
+    {% block messages %}
+    {% include 'shared/messages.html' %}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+    {% block off_advertisment %}
+    {% endblock %}
+
+    {% block footer %}
+    {% include 'shared/footer_component.html' %}
+    {% endblock %}
+
+</div><!-- End .page-wrapper -->
+
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+{% block mobile_menu %}
+{% include 'shared/mobile_menu.html' %}
+{% endblock %}
+
+{% block modal_login %}
+{% endblock %}
+
+{% block modal_newsletter %}
+{% endblock %}
+
+{% include 'shared/footer_ref.html' %}
+
+</body>
+
+</html>
