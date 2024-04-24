@@ -16,7 +16,6 @@ class User(AbstractUser):
     gender = models.CharField(max_length=1, choices=Gender.choices, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
-
     vip_due_date = models.DateTimeField(default=timezone.now)
     address= models.CharField(max_length=200, null=True, blank=True)
     email_active_code= models.CharField(max_length=100, blank=True, null=True)

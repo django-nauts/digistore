@@ -41,7 +41,7 @@ class RegisterForm(forms.Form):
         label='Password',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'id': 'singin-password-2',
+            # 'id': 'singin-password-2',
         }),
         validators=[validators.MaxLengthValidator(100)],
     )
@@ -49,7 +49,7 @@ class RegisterForm(forms.Form):
         label='Confirm your password',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
-            'id': 'singin-password-2',
+            # 'id': 'singin-password-2',
         }),
         validators=[validators.MaxLengthValidator(100)],
     )

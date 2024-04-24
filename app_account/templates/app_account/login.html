@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
 
 {% block content %}
 <main class="main">
@@ -26,28 +27,7 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane fade" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
 
-
-
-                        <div class="form-choice">
-                            <p class="text-center">or sign in with</p>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <a href="#" class="btn btn-login btn-g">
-                                        <i class="icon-google"></i>
-                                        Login With Google
-                                    </a>
-                                </div><!-- End .col-6 -->
-                                <div class="col-sm-6">
-                                    <a href="#" class="btn btn-login btn-f">
-                                        <i class="icon-facebook-f"></i>
-                                        Login With Facebook
-                                    </a>
-                                </div><!-- End .col-6 -->
-                            </div><!-- End .row -->
-                        </div><!-- End .form-choice -->
-                    </div><!-- .End .tab-pane -->
                     <div class="tab-pane fade show active" id="register-2" role="tabpanel"
                          aria-labelledby="register-tab-2">
                         <form method="post">
@@ -74,15 +54,15 @@
                             <p class="text-center">or sign in with</p>
                             <div class="row">
                                 <div class="col-sm-6">
-                                    <a href="#" class="btn btn-login btn-g">
+                                    <a href="{% provider_login_url 'google' %}" class="btn btn-login btn-g">
                                         <i class="icon-google"></i>
                                         Login With Google
                                     </a>
                                 </div><!-- End .col-6 -->
                                 <div class="col-sm-6">
-                                    <a href="#" class="btn btn-login  btn-f">
-                                        <i class="icon-facebook-f"></i>
-                                        Login With Facebook
+                                    <a href="{% provider_login_url 'github' %}" class="btn btn-login  btn-f">
+                                        <i class="icon-github"></i>
+                                        Login With Github
                                     </a>
                                 </div><!-- End .col-6 -->
                             </div><!-- End .row -->

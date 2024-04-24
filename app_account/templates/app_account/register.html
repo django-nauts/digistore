@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load socialaccount %}
+
 
 {% block content %}
 <main class="main">
@@ -27,48 +29,49 @@
                 </ul>
                 <div class="tab-content">
 
-                    </div><!-- .End .tab-pane -->
-                    <div class="tab-pane fade show active" id="register-2" role="tabpanel"
-                         aria-labelledby="register-tab-2">
-                        <form method="post" action="{% url 'app_account:register_page' %}">
-                                {% csrf_token %}
-                                {{ register_form.as_p }}
+                </div><!-- .End .tab-pane -->
+                <div class="tab-pane fade show active" id="register-2" role="tabpanel"
+                     aria-labelledby="register-tab-2">
+                    <form method="post" action="{% url 'app_account:register_page' %}">
+                        {% csrf_token %}
+                        {{ register_form.as_p }}
 
-                            <div class="form-footer">
-                                <button type="submit" class="btn btn-outline-primary-2">
-                                    <span>SIGN UP</span>
-<!--                                    <i class="icon-long-arrow-right"></i>-->
-                                </button>
+                        <div class="form-footer">
+                            <button type="submit" class="btn btn-outline-primary-2">
+                                <span>SIGN UP</span>
+                                                                    <i class="icon-long-arrow-right"></i>
+                            </button>
 
-<!--                                <div class="custom-control custom-checkbox">-->
-<!--                                    <input type="checkbox" class="custom-control-input" id="register-policy-2"-->
-<!--                                           required>-->
-<!--                                    <label class="custom-control-label" for="register-policy-2">I agree to the <a-->
-<!--                                            href="#">privacy policy</a> *</label>-->
-<!--                                </div>&lt;!&ndash; End .custom-checkbox &ndash;&gt;-->
-                            </div><!-- End .form-footer -->
-                        </form>
-                        <div class="form-choice">
-                            <p class="text-center">or sign in with</p>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <a href="#" class="btn btn-login btn-g">
-                                        <i class="icon-google"></i>
-                                        Login With Google
-                                    </a>
-                                </div><!-- End .col-6 -->
-                                <div class="col-sm-6">
-                                    <a href="#" class="btn btn-login  btn-f">
-                                        <i class="icon-facebook-f"></i>
-                                        Login With Facebook
-                                    </a>
-                                </div><!-- End .col-6 -->
-                            </div><!-- End .row -->
-                        </div><!-- End .form-choice -->
-                    </div><!-- .End .tab-pane -->
-                </div><!-- End .tab-content -->
-            </div><!-- End .form-tab -->
-        </div><!-- End .form-box -->
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="register-policy-2"
+                                                                       required>
+                                                                <label class="custom-control-label" for="register-policy-2">I agree to the <a
+                                                                        href="#">privacy policy</a> *</label>
+                                                            </div><!-- End .custom-checkbox -->
+                        </div><!-- End .form-footer -->
+                    </form>
+                    <div class="form-choice">
+                        <p class="text-center">or sign in with</p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <a href="{% provider_login_url 'google' %}" class="btn btn-login btn-g">
+                                    <i class="icon-google"></i>
+                                    Login With Google
+                                </a>
+                            </div><!-- End .col-6 -->
+                            <div class="col-sm-6">
+                                <a href="{% provider_login_url 'github' %}" class="btn btn-login  btn-f">
+                                    <i class="icon-github"></i>
+                                    Login With Github
+                                </a>
+                            </div><!-- End .col-6 -->
+                        </div><!-- End .row -->
+                    </div><!-- End .form-choice -->
+
+                </div><!-- .End .tab-pane -->
+            </div><!-- End .tab-content -->
+        </div><!-- End .form-tab -->
+    </div><!-- End .form-box -->
     </div><!-- End .container -->
     </div><!-- End .login-page section-bg -->
 </main><!-- End .main -->
