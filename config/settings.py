@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'app_cart.apps.AppCartConfig',
     'app_site_setting.apps.AppSiteSettingConfig',
     'app_product.apps.AppProductConfig',
+    'app_dashboard.apps.AppDashboardConfig',
 
     # External apps
     'allauth',

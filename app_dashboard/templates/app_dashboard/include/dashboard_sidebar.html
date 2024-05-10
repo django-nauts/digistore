@@ -1,0 +1,42 @@
+{% load static %}
+
+<ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+    <li class="nav-item">
+        {% if request.user.avatar %}
+        <img scr="{{ request.user.avatar.url }}" class="img-thumbnail" alt="profile-image">
+        {% else %}
+        <img src="{% static 'assets/images/digistore-default-profile-image.jpg' %}" class="img-thumbnail">
+        {% endif %}
+    </li>
+    <li class="nav-item">
+        <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="#tab-dashboard" role="tab"
+           aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab"
+           aria-controls="tab-orders" aria-selected="false">Orders</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab"
+           aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address" role="tab"
+           aria-controls="tab-address" aria-selected="false">Adresses</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="tab-account-link" data-toggle="tab"
+           href="{% url 'app_dashboard:change_password_page' %}" role="tab"
+           aria-controls="tab-account" aria-selected="false">Account details</a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'app_dashboard:change_password_page' %}">Change password</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'app_dashboard:change_info_page' %}">Change information</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'app_account:logout' %}">Sign Out</a>
+    </li>
+</ul>

@@ -10,6 +10,4 @@ urlpatterns = [
     path('forget-pass/', views.ForgetPasswordView.as_view(), name='forget_pass_page'),
     path('reset-pass/<email_active_code>/', views.ResetPasswordView.as_view(), name='reset_pass_page'),
     path('activate-account/<email_active_code>', views.ActivateAccountView.as_view(), name='activate_account'),
-
-    # path('dashboard/', views.dashboard, name='dashboard_page'),
 ]

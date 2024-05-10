@@ -38,11 +38,33 @@
                             <li><a href="about.html">About Us</a></li>
                             <li><a href="contact.html">Contact Us</a></li>
                             {% if request.user.is_authenticated %}
-                            <li><a href="{% url 'app_account:logout' %}" ><i class="icon-user"></i>Logout</a></li>
+
+                            <li>
+                                <div class="header-dropdown">
+                                    <a href="{% url 'app_account:logout' %}">
+                                        <i class="icon-user"></i>
+                                        {% if request.user.username %}
+                                        Hi, {{request.user.username }}
+                                        {% else %}
+                                        Hello, Dear!
+                                        {% endif %}
+                                    </a>
+                                    <div class="header-menu">
+                                        <ul>
+                                            <li><a href="#">Dashboard</a></li>
+                                            <li><a href="#">Profile</a></li>
+                                            <li><a href="{% url 'app_dashboard:change_password_page' %}">Change password</a></li>
+                                            <li><a href="{% url 'app_dashboard:change_info_page' %}">Change Info</a></li>
+                                            <li><a href="{% url 'app_account:logout' %}"
+                                                   class="btn btn-primary">Logout</a></li>
+                                        </ul>
+                                    </div><!-- End .header-menu -->
+                                </div><!-- End .header-dropdown --></li>
+
 
                             {% else %}
-                            <li><a href="{% url 'app_account:login_page' %}" ><i class="icon-user"></i>Login</a></li>
-                            <li><a href="{% url 'app_account:register_page' %}" >Register</a></li>
+                            <li><a href="{% url 'app_account:login_page' %}"><i class="icon-user"></i>Login</a></li>
+                            <li><a href="{% url 'app_account:register_page' %}">Register</a></li>
                             {% endif %}
                         </ul>
                     </li>
