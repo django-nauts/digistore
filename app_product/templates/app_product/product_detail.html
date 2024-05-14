@@ -36,7 +36,8 @@
                             <div class="row">
                                 <figure class="product-main-image">
                                     <img id="product-zoom" src="{% static 'assets/images/products/single/1.jpg' %}"
-                                         data-zoom-image="{% static 'assets/images/products/single/1-big.jpg' %}" alt="product image">
+                                         data-zoom-image="{% static 'assets/images/products/single/1-big.jpg' %}"
+                                         alt="product image">
 
                                     <a href="#" id="btn-product-gallery" class="btn-product-gallery">
                                         <i class="icon-arrows"></i>
@@ -47,25 +48,29 @@
                                     <a class="product-gallery-item active" href="#"
                                        data-image="{% static 'assets/images/products/single/1.jpg' %}"
                                        data-zoom-image="{% static 'assets/images/products/single/1-big.jpg' %}">
-                                        <img src="{% static 'assets/images/products/single/1-small.jpg' %}" alt="product side">
+                                        <img src="{% static 'assets/images/products/single/1-small.jpg' %}"
+                                             alt="product side">
                                     </a>
 
                                     <a class="product-gallery-item" href="#"
                                        data-image="{% static 'assets/images/products/single/2.jpg' %}"
                                        data-zoom-image="{% static 'assets/images/products/single/2-big.jpg' %}">
-                                        <img src="{% static 'assets/images/products/single/2-small.jpg' %}" alt="product cross">
+                                        <img src="{% static 'assets/images/products/single/2-small.jpg' %}"
+                                             alt="product cross">
                                     </a>
 
                                     <a class="product-gallery-item" href="#"
                                        data-image="{% static 'assets/images/products/single/3.jpg' %}"
                                        data-zoom-image="{% static 'assets/images/products/single/3-big.jpg' %}">
-                                        <img src="{% static 'assets/images/products/single/3-small.jpg' %}" alt="product with model">
+                                        <img src="{% static 'assets/images/products/single/3-small.jpg' %}"
+                                             alt="product with model">
                                     </a>
 
                                     <a class="product-gallery-item" href="#"
                                        data-image="{% static 'assets/images/products/single/4.jpg' %}"
                                        data-zoom-image="{% static 'assets/images/products/single/4-big.jpg' %}">
-                                        <img src="{% static 'assets/images/products/single/4-small.jpg' %}" alt="product back">
+                                        <img src="{% static 'assets/images/products/single/4-small.jpg' %}"
+                                             alt="product back">
                                     </a>
                                 </div><!-- End .product-image-gallery -->
                             </div><!-- End .row -->
@@ -98,10 +103,12 @@
 
                                 <div class="product-nav product-nav-thumbs">
                                     <a href="#" class="active">
-                                        <img src="{% static 'assets/images/products/single/1-thumb.jpg' %}" alt="product desc">
+                                        <img src="{% static 'assets/images/products/single/1-thumb.jpg' %}"
+                                             alt="product desc">
                                     </a>
                                     <a href="#">
-                                        <img src="{% static 'assets/images/products/single/2-thumb.jpg' %}" alt="product desc">
+                                        <img src="{% static 'assets/images/products/single/2-thumb.jpg' %}"
+                                             alt="product desc">
                                     </a>
                                 </div><!-- End .product-nav -->
                             </div><!-- End .details-filter-row -->
@@ -124,13 +131,15 @@
                             <div class="details-filter-row details-row-size">
                                 <label for="qty">Qty:</label>
                                 <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="10"
+                                    <input type="number" id="productQty" class="form-control" value="1" min="1" max="10"
                                            step="1" data-decimals="0" required>
                                 </div><!-- End .product-details-quantity -->
                             </div><!-- End .details-filter-row -->
 
                             <div class="product-details-action">
-                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                <button class="btn-product btn-cart" value="{{ product.id }}" id="addButton">
+                                    <span>add to cart</span>
+                                </button>
 
                                 <div class="details-action-wrapper">
                                     <a href="#" class="btn-product btn-wishlist"
@@ -342,7 +351,8 @@
                     <figure class="product-media">
                         <span class="product-label label-new">New</span>
                         <a href="product.html">
-                            <img src="{% static 'assets/images/products/product-4.jpg' %}" alt="Product image" class="product-image">
+                            <img src="{% static 'assets/images/products/product-4.jpg' %}" alt="Product image"
+                                 class="product-image">
                         </a>
 
                         <div class="product-action-vertical">
@@ -379,11 +389,13 @@
                                 <img src="{% static 'assets/images/products/product-4-thumb.jpg' %}" alt="product desc">
                             </a>
                             <a href="#">
-                                <img src="{% static 'assets/images/products/product-4-2-thumb.jpg' %}" alt="product desc">
+                                <img src="{% static 'assets/images/products/product-4-2-thumb.jpg' %}"
+                                     alt="product desc">
                             </a>
 
                             <a href="#">
-                                <img src="{% static 'assets/images/products/product-4-3-thumb.jpg' %}" alt="product desc">
+                                <img src="{% static 'assets/images/products/product-4-3-thumb.jpg' %}"
+                                     alt="product desc">
                             </a>
                         </div><!-- End .product-nav -->
                     </div><!-- End .product-body -->
@@ -393,7 +405,8 @@
                     <figure class="product-media">
                         <span class="product-label label-out">Out of Stock</span>
                         <a href="product.html">
-                            <img src="{% static 'assets/images/products/product-6.jpg' %}" alt="Product image" class="product-image">
+                            <img src="{% static 'assets/images/products/product-6.jpg' %}" alt="Product image"
+                                 class="product-image">
                         </a>
 
                         <div class="product-action-vertical">
@@ -431,7 +444,8 @@
                     <figure class="product-media">
                         <span class="product-label label-top">Top</span>
                         <a href="product.html">
-                            <img src="{% static 'assets/images/products/product-11.jpg' %}" alt="Product image" class="product-image">
+                            <img src="{% static 'assets/images/products/product-11.jpg' %}" alt="Product image"
+                                 class="product-image">
                         </a>
 
                         <div class="product-action-vertical">
@@ -465,14 +479,17 @@
 
                         <div class="product-nav product-nav-thumbs">
                             <a href="#" class="active">
-                                <img src="{% static 'assets/images/products/product-11-thumb.jpg' %}" alt="product desc">
+                                <img src="{% static 'assets/images/products/product-11-thumb.jpg' %}"
+                                     alt="product desc">
                             </a>
                             <a href="#">
-                                <img src="{% static 'assets/images/products/product-11-2-thumb.jpg' %}" alt="product desc">
+                                <img src="{% static 'assets/images/products/product-11-2-thumb.jpg' %}"
+                                     alt="product desc">
                             </a>
 
                             <a href="#">
-                                <img src="{% static 'assets/images/products/product-11-3-thumb.jpg' %}" alt="product desc">
+                                <img src="{% static 'assets/images/products/product-11-3-thumb.jpg' %}"
+                                     alt="product desc">
                             </a>
                         </div><!-- End .product-nav -->
                     </div><!-- End .product-body -->
@@ -481,7 +498,8 @@
                 <div class="product product-7 text-center">
                     <figure class="product-media">
                         <a href="product.html">
-                            <img src="{% static 'assets/images/products/product-10.jpg' %}" alt="Product image" class="product-image">
+                            <img src="{% static 'assets/images/products/product-10.jpg' %}" alt="Product image"
+                                 class="product-image">
                         </a>
 
                         <div class="product-action-vertical">
@@ -518,7 +536,8 @@
                 <div class="product product-7 text-center">
                     <figure class="product-media">
                         <a href="product.html">
-                            <img src="{% static 'assets/images/products/product-7.jpg' %}" alt="Product image" class="product-image">
+                            <img src="{% static 'assets/images/products/product-7.jpg' %}" alt="Product image"
+                                 class="product-image">
                         </a>
 
                         <div class="product-action-vertical">
@@ -555,5 +574,35 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
+
+{% endblock %}
+
+{% block footer %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js"
+        integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    let addToCartBtn = document.getElementById("addButton")
+    addToCartBtn.addEventListener('click', function (e) {
+        e.preventDefault()
+
+        let csrftoken = "{{ csrf_token }}"
+        let fd = new FormData()
+        fd.append("csrfmiddlewaretoken", csrftoken)
+        fd.append('productId', document.getElementById("addButton").value)
+        fd.append('productQty', document.getElementById('productQty').value)
+
+        axios.post('/cart/add/', fd)
+            .then(result=>{
+                console.log(result)
+                document.getElementById('cartQty').innerHTML=result.data.qty
+            })
+
+    })
+</script>
+
 
 {% endblock %}

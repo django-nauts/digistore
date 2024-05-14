@@ -53,8 +53,10 @@
                                         <ul>
                                             <li><a href="#">Dashboard</a></li>
                                             <li><a href="#">Profile</a></li>
-                                            <li><a href="{% url 'app_dashboard:change_password_page' %}">Change password</a></li>
-                                            <li><a href="{% url 'app_dashboard:change_info_page' %}">Change Info</a></li>
+                                            <li><a href="{% url 'app_dashboard:change_password_page' %}">Change
+                                                password</a></li>
+                                            <li><a href="{% url 'app_dashboard:change_info_page' %}">Change Info</a>
+                                            </li>
                                             <li><a href="{% url 'app_account:logout' %}"
                                                    class="btn btn-primary">Logout</a></li>
                                         </ul>
@@ -566,10 +568,20 @@
                 </div><!-- End .header-search -->
 
                 <div class="dropdown cart-dropdown">
-                    <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
+                    <a href="{% url 'app_cart:cart_detail_page' %}" class="dropdown-toggle" role="button"
+                       data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false" data-display="static">
                         <i class="icon-shopping-cart"></i>
-                        <span class="cart-count">2</span>
+
+                        <span class="cart-count" id="cartQty">
+                            {% with total_qty=cart|length %}
+                                {% if total_qty > 0 %}
+                                {{ total_qty }}
+                                {% else %}
+                                0
+                                {% endif %}
+                            {% endwith %}
+                        </span>
                     </a>
 
                     <div class="dropdown-menu dropdown-menu-right">
@@ -624,7 +636,7 @@
                         </div><!-- End .dropdown-cart-total -->
 
                         <div class="dropdown-cart-action">
-                            <a href="cart.html" class="btn btn-primary">View Cart</a>
+                            <a href="{% url 'app_cart:cart_detail_page' %}" class="btn btn-primary">View Cart</a>
                             <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i
                                     class="icon-long-arrow-right"></i></a>
                         </div><!-- End .dropdown-cart-total -->

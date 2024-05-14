@@ -30,7 +30,6 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('accounts/', include('allauth.socialaccount.urls')),
     path('dashboard/', include('app_dashboard.urls')),
-
 ]
 
 if settings.DEBUG:
