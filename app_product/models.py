@@ -19,6 +19,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products/')
     slug = models.SlugField()
     price = models.DecimalField(max_digits=4, decimal_places=2)
+    is_sale = models.BooleanField(default=False)
+    sale_price = models.DecimalField(max_digits=4, decimal_places=2, default=0)
     in_stock = models.BooleanField(default=True)
     is_active = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
