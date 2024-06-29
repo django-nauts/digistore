@@ -7,7 +7,7 @@ from app_product.models import Product
 
 # Create your views here.
 
-
+# Show detail of cart
 def cart_detail(request):
     cart = Cart(request)
     context = {
@@ -16,7 +16,7 @@ def cart_detail(request):
     return render(request, 'app_cart/cart.html', context)
 
 
-# Add item to your basket/cart
+# Add item to your basket/cart from product page
 def cart_add(request):
     cart = Cart(request)
     product_id = int(request.POST.get('productId'))
@@ -27,6 +27,7 @@ def cart_add(request):
     return JsonResponse({'qty': cart_qty})
 
 
+# Delete one row in the cart
 def cart_delete(request):
     cart = Cart(request)
     if request.method == 'POST':
@@ -37,21 +38,18 @@ def cart_delete(request):
         return JsonResponse({'success': True, 'subtotal': subtotal, 'qty': cart_qty})
 
 
+# Update qty of each row in cart (Increment & Decrement)
 def cart_update(request):
     cart = Cart(request)
     if request.method == 'POST':
         product_id = request.POST.get('productId')
         product_qty = request.POST.get('productQty')
+        product = Product.objects.get(id=int(product_id))
+        unit_price = product.price
         cart.update_cart(product_id=product_id, product_qty=product_qty)
         cart_qty = cart.__len__()
         subtotal = cart.get_total_price()
-
-        # unit_total_price = cart.unit_total_price(product_id=product_id, product_qty=product_qty)
-        # print("========================================")
-        # print(unit_total_price)
-        # print("========================================")
-
-        return JsonResponse({'success': 'OK', 'subtotal': subtotal, 'qty': cart_qty, })
+        return JsonResponse({'success': 'OK', 'subtotal': subtotal, 'qty': cart_qty, 'unit_price': unit_price})
 
 
 def whishlist(request):

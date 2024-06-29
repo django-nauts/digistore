@@ -54,8 +54,9 @@
                                         </h3><!-- End .product-title -->
                                     </div><!-- End .product -->
                                 </td>
-                                <td class="price-col" id="unitPrice" value="{{ product.price }}">{{ product.price }}
-                                </td>
+
+                                <td class="price-col">{{ product.price }}
+
                                 <td class="quantity-col">
 
                                     <div class="cart_quantity_button">
@@ -79,7 +80,9 @@
                                     </div>
 
                                 </td>
-                                <td class="total-col" id="individualTotalPrice">${{ item.total_price }}</td>
+                                <td class="total-col" >
+                                    $<span id="total{{product.id}}">{{ item.total_price }}</span>
+                                </td>
                                 <td class="remove-col">
                                     <button
                                             class="btn-remove listDeleteBtn"
@@ -128,7 +131,9 @@
                                 <tbody>
                                 <tr class="summary-subtotal">
                                     <td>Subtotal:</td>
-                                    <td id="cartSubtotal"> ${{ cart.get_total_price }}</td>
+                                    <td>
+                                        $<span id="cartSubtotal">{{ cart.get_total_price }}</span>
+                                    </td>
                                 </tr><!-- End .summary-subtotal -->
                                 <tr class="summary-shipping">
                                     <td>Shipping:</td>
@@ -202,6 +207,7 @@
 
 <script>
 
+    // Increase the qty of product by axios
     const listIncBtn = document.getElementsByClassName("cart_quantity_up")
     for (let btn of listIncBtn) {
         btn.addEventListener('click', function (e) {
@@ -213,10 +219,6 @@
             let new_qty = parseInt(current_qty) + 1
             document.getElementById("select" + productId).value = new_qty
 
-            console.log('current qty: ' + current_qty)
-            console.log('new qty: ' + new_qty)
-            console.log('product id: ' + productId)
-
             let fd = new FormData()
             fd.append("csrfmiddlewaretoken", csrftoken)
             fd.append('productId', productId)
@@ -226,11 +228,16 @@
                 .then(result => {
                     document.getElementById('cartQty').innerHTML = result.data.qty
                     document.getElementById('cartSubtotal').innerHTML = result.data.subtotal
-                    // document.getElementById('individualTotalPrice').innerHTML = result.data.unit_total_price
+                    let unit_price = parseFloat(result.data.unit_price)
+                    let induvidual_total_price = parseFloat(new_qty * unit_price).toFixed(2)
+                    // because there are more than one row of product, we should assaign
+                    // the id of product in the id od specific row like this id ="total{{product.id}}"
+                    document.getElementById("total" + productId).innerHTML = induvidual_total_price
                 })
         })
     }
 
+    // Decrease the qty of product by axios
     const listDecBtn = document.getElementsByClassName("cart_quantity_down")
     for (let btn of listDecBtn) {
         btn.addEventListener('click', function (e) {
@@ -242,23 +249,26 @@
             let new_qty = parseInt(current_qty) - 1
             document.getElementById("select" + productId).value = new_qty
 
-            console.log('current qty: ' + current_qty)
-            console.log('new qty: ' + new_qty)
-            console.log('product id: ' + productId)
-
             let fd = new FormData()
             fd.append("csrfmiddlewaretoken", csrftoken)
             fd.append('productId', productId)
             fd.append('productQty', new_qty)
 
+
             axios.post('/cart/update/', fd)
                 .then(result => {
                     document.getElementById('cartQty').innerHTML = result.data.qty
                     document.getElementById('cartSubtotal').innerHTML = result.data.subtotal
+                    let unit_price = parseFloat(result.data.unit_price)
+                    let induvidual_total_price = parseFloat(new_qty * unit_price).toFixed(2)
+                    // because there are more than one row of product, we should assaign
+                    // the id of product in the id od specific row like this id ="total{{product.id}}"
+                    document.getElementById("total" + productId).innerHTML = induvidual_total_price
                 })
         })
     }
 
+    // Delete one row form cart  by axios
     const listDeleteBtn = document.getElementsByClassName("listDeleteBtn")
     for (let btn of listDeleteBtn) {
         btn.addEventListener('click', function (e) {
@@ -282,32 +292,6 @@
                 })
         })
     }
-
-
-    // $(document).ready(function () {
-    //     var quantitiy = 0;
-    //     $('.cart_quantity_up').click(function (e) {
-    //         // Stop acting like a button
-    //         e.preventDefault();
-    //         // Get the field name
-    //         var quantity = parseInt($('#current_quantity').val());
-    //         // If is not undefined
-    //         $('#current_quantity').val(quantity + 1);
-    //         // Increment
-    //     });
-    //
-    //     $('.cart_quantity_down').click(function (e) {
-    //         // Stop acting like a button
-    //         e.preventDefault();
-    //         // Get the field name
-    //         var quantity = parseInt($('#current_quantity').val());
-    //         // If is not undefined
-    //         // Increment
-    //         if (quantity > 0) {
-    //             $('#current_quantity').val(quantity - 1);
-    //         }
-    //     });
-    // });
 
 </script>
 
