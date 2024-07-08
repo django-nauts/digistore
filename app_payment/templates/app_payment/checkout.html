@@ -55,40 +55,11 @@
                                     </div><!-- End .product -->
                                 </td>
 
-                                <td class="price-col">{{ product.price }}
+                                <td class="price-col">{{ product.price }}</td>
 
-                                <td class="quantity-col">
-
-                                    <div class="cart_quantity_button">
-
-                                        <button class="cart_quantity_up" href="" data-index="{{ product.id }}"> +
-                                        </button>
-
-                                        <input id="select{{ product.id }}"
-                                               class="cart_quantity_input"
-                                               type="number"
-                                               name="quantity"
-                                               min="1"
-                                               max="10"
-                                               size="10px"
-                                               value="{{ item.qty}}"
-                                               text-align="center">
-
-
-                                        <button class="cart_quantity_down " href="" data-index="{{ product.id }}"> -
-                                        </button>
-                                    </div>
-
-                                </td>
-                                <td class="total-col" >
+                                <td class="price-col"> {{ item.qty}} </td>
+                                <td class="total-col">
                                     $<span id="total{{product.id}}">{{ item.total_price }}</span>
-                                </td>
-                                <td class="remove-col">
-                                    <button
-                                            class="btn-remove listDeleteBtn"
-                                            data-productid="{{ product.id }}">
-                                        <i class="icon-close "></i>
-                                    </button>
                                 </td>
                             </tr>
                             {% endwith %}
@@ -113,7 +84,7 @@
                                     <div class="input-group">
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary-2" type="submit"><i
-                                                    class="icon-long-arrow-right"> </i></button>
+                                                    class="icon-long-arrow-right"></i></button>
                                         </div><!-- .End .input-group-append -->
                                     </div><!-- End .input-group -->
                                 </form>
@@ -187,7 +158,7 @@
                                 </tbody>
                             </table><!-- End .table table-summary -->
 
-                            <a href="{% url 'app_payment:checkout_page' %}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO
+                            <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO
                                 CHECKOUT</a>
                         </div><!-- End .summary -->
 
@@ -204,96 +175,6 @@
 
 {% endblock %}
 {% block footer %}
-
-<script>
-
-    // Increase the qty of product by axios
-    const listIncBtn = document.getElementsByClassName("cart_quantity_up")
-    for (let btn of listIncBtn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault()
-
-            let csrftoken = "{{ csrf_token }}"
-            let productId = btn.getAttribute("data-index")
-            let current_qty = document.getElementById("select" + productId).value
-            let new_qty = parseInt(current_qty) + 1
-            document.getElementById("select" + productId).value = new_qty
-
-            let fd = new FormData()
-            fd.append("csrfmiddlewaretoken", csrftoken)
-            fd.append('productId', productId)
-            fd.append('productQty', new_qty)
-
-            axios.post('/cart/update/', fd)
-                .then(result => {
-                    document.getElementById('cartQty').innerHTML = result.data.qty
-                    document.getElementById('cartSubtotal').innerHTML = result.data.subtotal
-                    let unit_price = parseFloat(result.data.unit_price)
-                    let induvidual_total_price = parseFloat(new_qty * unit_price).toFixed(2)
-                    // because there are more than one row of product, we should assaign
-                    // the id of product in the id od specific row like this id ="total{{product.id}}"
-                    document.getElementById("total" + productId).innerHTML = induvidual_total_price
-                })
-        })
-    }
-
-    // Decrease the qty of product by axios
-    const listDecBtn = document.getElementsByClassName("cart_quantity_down")
-    for (let btn of listDecBtn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault()
-
-            let csrftoken = "{{ csrf_token }}"
-            let productId = btn.getAttribute("data-index")
-            let current_qty = document.getElementById("select" + productId).value
-            let new_qty = parseInt(current_qty) - 1
-            document.getElementById("select" + productId).value = new_qty
-
-            let fd = new FormData()
-            fd.append("csrfmiddlewaretoken", csrftoken)
-            fd.append('productId', productId)
-            fd.append('productQty', new_qty)
-
-
-            axios.post('/cart/update/', fd)
-                .then(result => {
-                    document.getElementById('cartQty').innerHTML = result.data.qty
-                    document.getElementById('cartSubtotal').innerHTML = result.data.subtotal
-                    let unit_price = parseFloat(result.data.unit_price)
-                    let induvidual_total_price = parseFloat(new_qty * unit_price).toFixed(2)
-                    // because there are more than one row of product, we should assaign
-                    // the id of product in the id od specific row like this id ="total{{product.id}}"
-                    document.getElementById("total" + productId).innerHTML = induvidual_total_price
-                })
-        })
-    }
-
-    // Delete one row form cart  by axios
-    const listDeleteBtn = document.getElementsByClassName("listDeleteBtn")
-    for (let btn of listDeleteBtn) {
-        btn.addEventListener('click', function (e) {
-            e.preventDefault()
-
-            let csrftoken = "{{ csrf_token }}"
-            let productId = btn.getAttribute("data-productid")
-            // You can access to prodoctId with both of these codes -> btn.getAttribute("data-productid") =btn.dataset.productid
-
-            let fd = new FormData()
-            fd.append("csrfmiddlewaretoken", csrftoken)
-            fd.append('productId', productId)
-
-            axios.post('/cart/delete/', fd)
-                .then(result => {
-                    console.log(result.data)
-                    this.closest('tr').remove()
-                    document.getElementById('cartQty').innerHTML = result.data.qty
-                    document.getElementById('cartSubtotal').innerHTML = result.data.subtotal
-
-                })
-        })
-    }
-
-</script>
 
 
 {% endblock %}

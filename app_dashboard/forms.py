@@ -3,12 +3,13 @@ from django.core.exceptions import ValidationError
 from django import forms
 
 from app_account.models import User
+from app_payment.models import ShippingAddress
 
 
 class UserInfoForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name','avatar', 'gender', 'date_of_birth', 'biography']
+        fields = ['username', 'first_name', 'last_name', 'avatar', 'gender', 'date_of_birth', 'biography']
         widgets = {
             'username': forms.TextInput(attrs={
                 'class': 'form-control'
@@ -45,6 +46,45 @@ class UserInfoForm(forms.ModelForm):
             'date_of_birth': 'Date of birth',
             'cellphone_no': 'Cellphone No.',
             'biography': 'Biography',
+        }
+
+
+class ShippingAddressModelForm(forms.ModelForm):
+    class Meta:
+        model = ShippingAddress
+        fields = ['full_name', 'email', 'address', 'city', 'state', 'zipcode','main_address']
+        widgets = {
+            'full_name': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control'
+            }),
+            'address': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'city': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'state': forms.TextInput(attrs={
+                'class': 'form-control'
+            }),
+            'zipcode': forms.NumberInput(attrs={
+                'class': 'form-control',
+            }),
+            'main_address': forms.(attrs={
+                'class': 'form-control',
+            }),
+        }
+
+        labels = {
+            'full_name': 'Full name',
+            'email': 'Email',
+            'address': 'Address',
+            'city': 'City',
+            'state': 'State',
+            'zipcode': 'Zipcode',
+            'main_address': 'is it the choosen address?'
         }
 
 
@@ -86,4 +126,3 @@ class ChangePasswordForm(forms.Form):
     #     if new_password != current_password:
     #         return new_password
     #     raise ValidationError('Your new password should be something different than current password!')
-

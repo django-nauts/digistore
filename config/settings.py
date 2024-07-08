@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'app_site_setting.apps.AppSiteSettingConfig',
     'app_product.apps.AppProductConfig',
     'app_dashboard.apps.AppDashboardConfig',
+    'app_payment.apps.AppPaymentConfig',
 
     # External apps
     'allauth',

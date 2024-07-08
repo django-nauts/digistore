@@ -4,7 +4,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views import View
 
 from app_account.models import User
-from .forms import UserInfoForm, ChangePasswordForm
+from app_payment.models import ShippingAddress
+from .forms import UserInfoForm, ChangePasswordForm, ShippingAddressModelForm
 
 
 # Create your views here.
@@ -13,8 +14,8 @@ from .forms import UserInfoForm, ChangePasswordForm
 class Dashboard(View):
     template_name = "app_dashboard/dashboard.html"
 
-    def get(self, request, pk):
-        user_page = get_object_or_404(User, id=pk)
+    def get(self, request):
+        user_page = get_object_or_404(User, id=request.user.id)
         context = {
             'user_page': user_page,
         }
@@ -22,12 +23,12 @@ class Dashboard(View):
 
 
 class ChangeUserInfoView(View):
-    def get(self,request):
-        current_user= User.objects.filter(id=request.user.id).first()
+    def get(self, request):
+        current_user = User.objects.filter(id=request.user.id).first()
         form = UserInfoForm(instance=current_user)
-        context={
+        context = {
             'current_user': current_user,
-            'form':form,
+            'form': form,
         }
         return render(request, 'app_dashboard/user_change_information.html', context)
 
@@ -37,9 +38,9 @@ class ChangeUserInfoView(View):
         if form.is_valid():
             form.save()
             messages.success(request, 'Your changes have been successfully saved.', 'secondary')
-        context={
+        context = {
             'current_user': current_user,
-            'form':form,
+            'form': form,
         }
         return render(request, 'app_dashboard/user_change_information.html', context)
 
@@ -75,7 +76,26 @@ class ChangePasswordView(View):
         return render(request, 'app_dashboard/user_change_password.html', context)
 
 
+class ShippingAddressView(View):
+    def get(self, request):
+        current_user = User.objects.filter(id=request.user.id).first()
+        shipping_address = ShippingAddress.objects.filter(user=request.user).first()
+        form = ShippingAddressModelForm(instance=shipping_address, data=request.POST)
+        context = {
+            'form': form,
+            'current_user': current_user,
+        }
+        return render(request, 'app_dashboard/change_address.html', context)
 
-
-
-
+    def post(self, request):
+        current_user = User.objects.filter(id=request.user.id).first()
+        shipping_address = ShippingAddress.objects.filter(user=request.user).first()
+        form = ShippingAddressModelForm(instance=shipping_address, data=request.POST )
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your changes have been successfully saved.', 'secondary')
+        context = {
+            'form': form,
+            'current_user': current_user,
+        }
+        return render(request, 'app_dashboard/change_address.html', context)
