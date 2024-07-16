@@ -18,9 +18,8 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True, blank=True)
     biography = models.TextField(null=True, blank=True)
     vip_due_date = models.DateTimeField(default=timezone.now)
-    address = models.ManyToManyField('UserAddress', related_name='addresses', blank=True, null=True)
     email_active_code = models.CharField(max_length=100, blank=True, null=True)
-
+    user_cart = models.CharField(max_length=1000, null=True, blank=True)
     def is_vip_due_date(self):
         if self.vip_due_date > timezone.now():
             return True
@@ -32,5 +31,3 @@ class User(AbstractUser):
     is_vip_due_date.short_description = 'VIP'
 
 
-class UserAddress(models.Model):
-    full_address = models.CharField(max_length=1000, null=True, blank=True)

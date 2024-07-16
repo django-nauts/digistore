@@ -1,0 +1,283 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <main class="main">
+        <div class="page-header text-center"
+             style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
+            <div class="container">
+                <h1 class="page-title">My Account<span>Shop</span></h1>
+            </div><!-- End .container -->
+        </div><!-- End .page-header -->
+        <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+            <div class="container">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">My Account</li>
+                </ol>
+            </div><!-- End .container -->
+        </nav><!-- End .breadcrumb-nav -->
+
+        <div class="page-content">
+            <div class="dashboard">
+                <div class="container">
+                    <div class="row">
+                        <aside class="col-md-4 col-lg-3">
+                            {% if current_user.id == request.user.id %}
+                                {% include 'app_dashboard/include/dashboard_sidebar.html' %}
+                            {% endif %}
+
+                        </aside><!-- End .col-lg-3 -->
+
+                        <div class="col-md-8 col-lg-9">
+                            <div id="address-area">
+                                <table class="table table-cart table-mobile">
+                                    <thead>
+                                    <tr>
+                                        <th>No.</th>
+                                        <th></th>
+                                        <th> Full address</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody id="cartItems">
+                                    {% if shipping_addresses %}
+                                        {% for ship_add in shipping_addresses %}
+                                            <tr>
+                                                <td class="product-col">
+                                                    {{ forloop.counter }}
+                                                </td>
+                                                <td></td>
+                                                <td class="product-title">
+                                                    {{ ship_add.full_name }} -{{ ship_add.address }} -
+                                                    {{ ship_add.city }} - {{ ship_add.state }} -
+                                                    {{ ship_add.zipcode }} -{{ ship_add.email }}
+                                                </td>
+
+                                                <td class="remove-col">
+                                                    <button
+                                                            class="btn-remove listDeleteBtn"
+                                                            data-shipid="{{ ship_add.id }}">
+                                                        <i class="icon-close "></i>
+                                                    </button>
+
+
+                                                    {% if ship_add.main_address %}
+                                                        <button class="btn-remove listCheckBtn "
+                                                                data-check="{{ ship_add.id }}">
+                                                            <input type="checkbox" checked>
+                                                        </button>
+                                                    {% else %}
+                                                        <button class="btn-remove listUnCheckBtn "
+                                                                data-check="{{ ship_add.id }}">
+                                                            <input type="checkbox">
+                                                        </button>
+                                                    {% endif %}
+
+
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    {% else %}
+                                        <tr>
+                                            <td class="product-col">
+                                                <div class="product">
+                                                    <h3 class="product-title">
+                                                        <a href="#">You can add your address in below form</a>
+                                                    </h3><!-- End .product-title -->
+                                                </div><!-- End .product -->
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+
+                                    </tbody>
+                                </table><!-- End .table table-cart -->
+
+
+                            </div>
+                            <div class="tab-content">
+
+                                <div>
+                                    <form method="POST">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Full name *</label>
+                                                <input type="text" class="form-control" required id="fullname">
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <label>Email address *</label>
+                                                <input type="email" class="form-control" required id="email">
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>City *</label>
+                                                <input type="text" class="form-control" required id="city">
+                                            </div><!-- End .col-sm-6 -->
+
+                                            <div class="col-sm-6">
+                                                <label>State *</label>
+                                                <input type="text" class="form-control" required id="state">
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+                                        <label>Full address *</label>
+                                        <input type="text" class="form-control" required id="address">
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label>Zipcode *</label>
+                                                <input type="text" class="form-control" required id="zipcode">
+                                            </div><!-- End .col-sm-6 -->
+                                        </div><!-- End .row -->
+
+
+                                        <button type="submit" class="btn btn-outline-primary-2" id="form-btn">
+                                            <span>SAVE CHANGES</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </form>
+                                </div><!-- .End .tab-pane -->
+                            </div>
+                        </div><!-- End .col-lg-9 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .dashboard -->
+        </div><!-- End .page-content -->
+    </main><!-- End .main -->
+
+{% endblock %}
+
+{% block footer %}
+
+    <script>
+
+        const listCheckBtn = document.getElementsByClassName("listCheckBtn")
+        for (let btn of listCheckBtn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault()
+
+                let shipAddId = btn.getAttribute("data-check")
+                console.log(shipAddId)
+
+                let csrftoken = "{{ csrf_token }}"
+
+                let fd = new FormData()
+                fd.append("fullname", document.getElementById("fullname").value)
+                fd.append("csrfmiddlewaretoken", csrftoken)
+                fd.append("shipAddId", shipAddId)
+                fd.append("check_status", true)
+
+                axios.post("/dashboard/shipping-address/check/", fd)
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.check_status === "unchecked") {
+                            btn.innerHTML = `<input type="checkbox">`
+                            console.log(res.data.body)
+                            document.getElementById('address-area').innerHTML = res.data.body
+                            {#windows.location.reload()#}
+
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            })
+        }
+
+        const listUnCheckBtn = document.getElementsByClassName("listUnCheckBtn")
+        for (let btn of listUnCheckBtn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault()
+
+                let shipAddId = btn.getAttribute("data-check")
+                console.log(shipAddId)
+
+                let csrftoken = "{{ csrf_token }}"
+
+                let fd = new FormData()
+                fd.append("fullname", document.getElementById("fullname").value)
+                fd.append("csrfmiddlewaretoken", csrftoken)
+                fd.append("shipAddId", shipAddId)
+                fd.append("check_status", false)
+
+                axios.post("/dashboard/shipping-address/check/", fd)
+                    .then(res => {
+                        console.log(res.data)
+                        if (res.data.check_status === "checked") {
+                            btn.innerHTML = `<input type="checkbox" checked>`
+                            console.log("hello")
+                            document.getElementById('address-area').innerHTML = res.data.body
+                            {#windows.location.reload()#}
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            })
+        }
+
+
+        // Add new address  by AJAX/axios
+        let formBtn = document.getElementById("form-btn");
+        formBtn.addEventListener("click", function (e) {
+            e.preventDefault()
+
+            let csrftoken = "{{ csrf_token }}"
+
+            let fd = new FormData()
+            fd.append("fullname", document.getElementById("fullname").value)
+            fd.append("email", document.getElementById("email").value)
+            fd.append("city", document.getElementById("city").value)
+            fd.append("address", document.getElementById("address").value)
+            fd.append("state", document.getElementById("state").value)
+            fd.append("zipcode", document.getElementById("zipcode").value)
+            fd.append("csrfmiddlewaretoken", csrftoken)
+
+            axios.post("/dashboard/shipping-address/chosen/", fd)
+                .then(res => {
+                    document.getElementById('address-area').innerHTML = res.data
+                    document.getElementById("email").value = "";
+                    document.getElementById("city").value = "";
+                    document.getElementById("state").value = "";
+                    document.getElementById("zipcode").value = "";
+                    document.getElementById("fullname").value = "";
+                    document.getElementById("address").value = "";
+                    document.getElementById('address-area').scrollIntoView({behavior: "smooth"});
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        })
+
+
+        // Delete one row form address by AJAX/axios
+        const listDeleteBtn = document.getElementsByClassName("listDeleteBtn")
+        for (let btn of listDeleteBtn) {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault()
+
+                let csrftoken = "{{ csrf_token }}"
+                let shipId = btn.getAttribute("data-shipid")
+                // You can access to prodoctId with both of these codes -> btn.getAttribute("data-productid") =btn.dataset.productid
+
+                let fd = new FormData()
+                fd.append("csrfmiddlewaretoken", csrftoken)
+                fd.append('shipId', shipId)
+
+                axios.post('/dashboard/shipping-address/delete/', fd)
+                    .then(result => {
+                        console.log(result.data)
+                        this.closest('tr').remove()
+                    })
+            })
+        }
+
+    </script>
+
+
+{% endblock %}

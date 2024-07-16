@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth import login, logout
 from django.contrib import messages
 from django.http import Http404
@@ -8,6 +10,7 @@ from django.views import View
 from utils.email_service import send_email_to_user
 from .forms import LoginForm, RegisterForm, ForgetPasswordForm, ResetPasswordForm
 from .models import User
+from app_cart.cart import Cart
 
 
 # Create your views here.
@@ -33,6 +36,22 @@ class LoginView(View):
                     is_password_correct = user.check_password(password)
                     if is_password_correct:
                         login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+                        # Update user basket after login
+                        current_user = User.objects.get(id=request.user.id)
+                        user_id = current_user.id
+                        saved_cart = current_user.user_cart
+                        print(saved_cart)
+                        if saved_cart:
+                            converted_cart = json.loads(saved_cart)
+                            cart = Cart(request)
+                            # loop thru the cart
+                            # example of cart: {"1": {"price": "10.54", "qty": 4}, "2": {"price": "5.68", "qty": 5}}
+                            for key, value in converted_cart.items():
+                                qty = value['qty']
+                                price = value['price']
+                                cart.db_add(product_id=key, qty=qty, price=price)
+
                         messages.success(request, 'You login successfully.', 'secondary')
                         return redirect('app_home:home_page')
                     else:
@@ -73,7 +92,7 @@ class RegisterView(View):
                 new_user.save()
                 send_email_to_user('Activation code in Digistore', new_user.email, {'user': new_user},
                                    'emails/activation_email.html')
-                messages.success(request,'You registered successfully', 'secondary')
+                messages.success(request, 'You registered successfully', 'secondary')
                 return redirect('app_home:home_page')
         context = {
             'register_form': register_form
@@ -151,7 +170,6 @@ class ActivateAccountView(View):
                 return redirect('app_account:login_page')
             else:
                 pass
-
         raise Http404
 
 
@@ -159,6 +177,3 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('app_account:login_page')
-
-
-

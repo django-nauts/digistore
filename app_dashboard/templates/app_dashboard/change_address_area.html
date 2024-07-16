@@ -1,0 +1,73 @@
+{% load static %}
+
+<div id="address-area">
+    <table class="table table-cart table-mobile">
+        <thead>
+        <tr>
+            <th>No.</th>
+            <th></th>
+            <th> Full address</th>
+            <th></th>
+        </tr>
+        </thead>
+
+        <tbody id="cartItems">
+        {% if shipping_addresses %}
+            {% for ship_add in shipping_addresses %}
+                <tr>
+                    <td class="product-col">
+                        {{ forloop.counter }}
+                    </td>
+                    <td></td>
+                    <td class="product-title">
+                        {{ ship_add.full_name }} -{{ ship_add.address }} -
+                        {{ ship_add.city }} - {{ ship_add.state }} -
+                        {{ ship_add.zipcode }} -{{ ship_add.email }}
+                    </td>
+
+                    <td class="remove-col">
+                        <button
+                                class="btn-remove listDeleteBtn"
+                                data-shipid="{{ ship_add.id }}">
+                            <i class="icon-close "></i>
+                        </button>
+
+
+                        {% if ship_add.main_address %}
+                            <button class="btn-remove listCheckBtn "
+                                    data-check="{{ ship_add.id }}">
+                                <input type="checkbox" checked>
+                            </button>
+                        {% else %}
+                            <button class="btn-remove listUnCheckBtn "
+                                    data-check="{{ ship_add.id }}">
+                                <input type="checkbox">
+                            </button>
+                        {% endif %}
+
+
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td class="product-col">
+                    <div class="product">
+                        <h3 class="product-title">
+                            <a href="#">You can add your address in below form</a>
+                        </h3><!-- End .product-title -->
+                    </div><!-- End .product -->
+                </td>
+            </tr>
+        {% endif %}
+
+        </tbody>
+    </table><!-- End .table table-cart -->
+
+
+</div>
+
+
+
+
+
