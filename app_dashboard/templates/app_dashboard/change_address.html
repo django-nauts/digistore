@@ -68,12 +68,12 @@
                                                     {% if ship_add.main_address %}
                                                         <button class="btn-remove listCheckBtn "
                                                                 data-check="{{ ship_add.id }}">
-                                                            <input type="checkbox" checked>
+                                                            <input type="radio" name="hi" checked>
                                                         </button>
                                                     {% else %}
                                                         <button class="btn-remove listUnCheckBtn "
                                                                 data-check="{{ ship_add.id }}">
-                                                            <input type="checkbox">
+                                                            <input type="radio" name="hi">
                                                         </button>
                                                     {% endif %}
 

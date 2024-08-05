@@ -120,8 +120,8 @@
                                         {{ selected_shipping_address.zipcode }},
                                         {{ selected_shipping_address.email }}
 
-                                        <a href="{% url "app_dashboard:shipping_address_page" %}">Change
-                                            address</a>
+                                        <a href="{% url "app_dashboard:shipping_address_page" %}">
+                                        Change address</a>
                                     </td>
                                     <td>&nbsp;</td>
                                     </tr><!-- End .summary-shipping-estimate -->
@@ -135,7 +135,7 @@
                                     </tbody>
                                 </table><!-- End .table table-summary -->
 
-                                <a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
+                                <a href="{% url 'app_payment:process_page' order.id %}" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED
                                     FOR PAYMENT</a>
                             </div><!-- End .summary -->
 

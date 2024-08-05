@@ -11,4 +11,6 @@ urlpatterns = [
     path('shipping-address/delete/', views.shipping_address_delete, name='shipping_address_delete'),
     path('shipping-address/chosen/', views.chosen_shipping_address, name='shipping_address_chosen_page'),
     path('shipping-address/check/', views.check_shipping_address, name='shipping_address_check'),
+    path('orders/', views.Orders.as_view(), name='orders_page'),
+    path('orders/<int:order_id>/', views.OrderDetail.as_view(), name='order_detail_page'),
 ]

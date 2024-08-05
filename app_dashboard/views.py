@@ -6,7 +6,7 @@ from django.views import View
 from django.template.loader import render_to_string
 
 from app_account.models import User
-from app_payment.models import ShippingAddress
+from app_payment.models import ShippingAddress, Order
 from .forms import UserInfoForm, ChangePasswordForm
 
 
@@ -165,3 +165,26 @@ def check_shipping_address(request):
             return JsonResponse({'body': body, 'check_status': 'checked'})
 
         return HttpResponse('Ajaxify by Ventuno')
+
+
+class Orders(View):
+    def get(self, request):
+        orders = Order.objects.filter(user_id=request.user.id, is_paid=True).order_by('-date_ordered')
+        user_page = User.objects.filter(id=request.user.id).first()
+        context = {
+            'orders': orders,
+            'current_user': user_page,
+        }
+        return render(request, 'app_dashboard/orders.html', context)
+
+
+class OrderDetail(View):
+    def get(self, request, order_id):
+        order = Order.objects.prefetch_related('items').get(user_id=request.user.id, is_paid=True, id=order_id)
+        print(order)
+        user_page = User.objects.filter(id=request.user.id).first()
+        context = {
+            'order': order,
+            'current_user': user_page,
+        }
+        return render(request, 'app_dashboard/order_detail.html', context)

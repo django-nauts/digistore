@@ -6,6 +6,7 @@ pyvenv.cfg
 __init__.py
 __pycache__
 .idea
+.env
 venv
 /migrations/
 
