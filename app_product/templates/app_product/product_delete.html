@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<main class="main">
+  <div class="page-header text-center">
+    <div class="container">
+      <section class="main">
+          <div class="container">
+
+              <div class="main">
+
+				<form action="" method="post">{% csrf_token %}
+				<p>Are you sure you want to delete "{{ product.title }}"?</p>
+				<input type="submit" value="Confirm">
+				</form>
+
+              </div>
+
+          </div>
+      </section>
+	  </div>
+	</main>
+
+{% endblock content %}

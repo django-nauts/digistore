@@ -72,9 +72,6 @@ class ShippingAddressModelForm(forms.ModelForm):
             'zipcode': forms.NumberInput(attrs={
                 'class': 'form-control',
             }),
-            'main_address': forms.(attrs={
-                'class': 'form-control',
-            }),
         }
 
         labels = {
