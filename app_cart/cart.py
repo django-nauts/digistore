@@ -42,7 +42,7 @@ class Cart():
             self.cart[product_id] = {'price': str(product.price), 'qty': int(qty)}
         self.save_modification()
 
-        # Adding persistence to our catt after logged out the items will remain inside of specific user cart
+        # Adding persistence to our cart after logged out the items will remain inside of specific user cart
         if self.request.user.is_authenticated:
             current_user = User.objects.filter(id=self.request.user.id)
             user_cart = str(self.cart)

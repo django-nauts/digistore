@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<main class="main">
+    <div class="page-header text-center"
+         style="background-image: url('{% static 'assets/images/page-header-bg.jpg' %}')">
+        <div class="container">
+            <h1 class="page-title">My Account<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">My Account</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-4 col-lg-3">
+                        {% if current_user.id == request.user.id %}
+                        {% include 'app_dashboard/include/dashboard_sidebar.html' %}
+                        {% endif %}
+
+                    </aside><!-- End .col-lg-3 -->
+
+                    <div class="col-md-8 col-lg-9">
+                        <br>
+
+
+                        <div class="card text-center">
+                                <table class="table table-cart table-mobile">
+                                    <thead>
+                                    <tr>
+                                        <th> Order No.: {{ order.id }}</th>
+                                        <th> Date: {{ order.date_ordered }}</th>
+                                        <th> Total Amount: {{ order.amount_paid }}</th>
+                                    </tr>
+                                    </thead>
+                                </table><!-- End .table table-wishlist -->
+                        </div>
+
+                        <div class="card-body">
+                            <p class="card-text">Shipping address: {{ order.shipping_address }}</p>
+                            <p class="card-text">Email address: {{ order.email }}</p>
+                        </div>
+
+
+                        <div>
+                            <table class="table table-cart table-mobile">
+                                <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+
+                                <tbody id="cartItems">
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td class="product-col">
+                                        <div class="product">
+                                            <figure class="product-media">
+                                                <a href="#">
+                                                    <img src="{{ item.product.image.url }}"
+                                                         class="product-cart-image"
+                                                         alt="Product image">
+                                                </a>
+                                            </figure>
+
+                                            <h3 class="product-title">
+                                                <a href="#">{{ item.product.title }}</a>
+                                            </h3><!-- End .product-title -->
+                                        </div><!-- End .product -->
+                                    </td>
+
+                                    <td class="price-col">{{ item.price }}</td>
+
+                                    <td class="price-col"> {{ item.qty }}</td>
+                                    <td class="total-col">
+                                        $<span>{{ item.get_cost }}</span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table><!-- End .table table-wishlist -->
+
+
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+{% endblock %}
+
+{% block footer %}
+{% endblock %}

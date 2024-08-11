@@ -9,8 +9,11 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()  # take environment variables from .env.
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -52,7 +55,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
-	'taggit',
+    'taggit',
 ]
 
 MIDDLEWARE = [
@@ -185,3 +188,10 @@ LOGIN_REDIRECT_URL = "app_home:home_page"
 ACCOUNT_LOGOUT_ON_GET = True
 # LOGOUT_REDIRECT_URL = "blog_index"
 # # ACCOUNT_LOGOUT_REDIRECT_URL = 'app_account/login/'
+
+
+# Stripe payment portal settings
+STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
+STRIPE_SECRET_KEY =  os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_API_VERSION = '2024-06-20'
+STRIPE_WEBHOOK_SECRET = 'whsec_8f872f35c56a9b328cbfa12585b5ce0f6878539519cf6fba70928642f7ed07fe'

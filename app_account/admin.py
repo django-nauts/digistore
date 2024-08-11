@@ -3,7 +3,6 @@ from django.contrib import admin
 from app_payment.models import ShippingAddress
 from .models import User
 
-
 # Register your models here.
 
 class ShippingAddressInline(admin.StackedInline):

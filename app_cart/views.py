@@ -3,15 +3,18 @@ from django.shortcuts import render, get_object_or_404
 
 from .cart import Cart
 from app_product.models import Product
+from app_payment.models import ShippingAddress
 
 
 # Create your views here.
 
 # Show detail of cart
 def cart_detail(request):
+    selected_shipping_address = ShippingAddress.objects.filter(user_id = request.user.id, main_address= True).first()
     cart = Cart(request)
     context = {
         'cart': cart,
+        'selected_shipping_address':selected_shipping_address,
     }
     return render(request, 'app_cart/cart.html', context)
 
