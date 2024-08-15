@@ -2,33 +2,17 @@ from django.db import models
 from django.urls import reverse
 
 from django.template.defaultfilters import slugify
+from taggit.managers import TaggableManager
 
 from app_account.models import User
 
-from taggit.managers import TaggableManager
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=150)
-    slug = models.SlugField(unique=True)
-
-    class Meta:
-        verbose_name_plural = "categories"
-
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse("app_product:product_detail", kwargs={"slug": self.slug})
-
 
 class Product(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=150)
     description = models.TextField()
     image = models.ImageField(upload_to='products/')
-    slug = models.SlugField()
+    slug = models.SlugField(unique=True)
     tags = TaggableManager()
     price = models.DecimalField(max_digits=4, decimal_places=2)
     is_sale = models.BooleanField(default=False)

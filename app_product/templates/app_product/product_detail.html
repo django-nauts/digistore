@@ -146,7 +146,7 @@
                                 <div class="product-cat">
                                     <span>Category:</span>
 									{% for tag in product.tags.all %}
-									<a href="#">{{ tag }}</a>
+									<a href="{% url 'app_product:product_category' tag_slug=tag.slug %}">{{ tag }}</a>
 									{% endfor %}
                                 </div><!-- End .product-cat -->
 

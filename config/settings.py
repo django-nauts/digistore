@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+	'django.contrib.sites',
 
     # Internal apps
     'app_home.apps.AppHomeConfig',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'app_cart.apps.AppCartConfig',
     'app_site_setting.apps.AppSiteSettingConfig',
     'app_product.apps.AppProductConfig',
+	'api_product.apps.ApiProductConfig',
     'app_dashboard.apps.AppDashboardConfig',
     'app_payment.apps.AppPaymentConfig',
 
@@ -56,7 +58,25 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'taggit',
+	'rest_framework',
+	'rest_framework.authtoken',
+	'corsheaders',
+	'dj_rest_auth',
+	'dj_rest_auth.registration',
+	'drf_spectacular',
 ]
+
+REST_FRAMEWORK = {
+	'DEFAULT_PERMISSION_CLASSES': [
+		# Only admins/superusers can access API pages
+		'rest_framework.permissions.IsAdminUser',
+	],
+	'DEFAULT_AUTHENTICATION_CLASSES': [
+		'rest_framework.authentication.SessionAuthentication',
+		'rest_framework.authentication.BasicAuthentication',
+	],
+	'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,7 +89,15 @@ MIDDLEWARE = [
 
     # External moddleware
     "allauth.account.middleware.AccountMiddleware",
+	'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+	'http://localhost:8000',
+	'https://localhost:8000',
+)
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://localhost:8000',]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -84,6 +112,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+				'django.template.context_processors.request',
+				
                 'app_cart.context_processors.cart'
             ],
         },
@@ -181,6 +211,8 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 # Below 4 lines are added so our website work properly with allauth library(usually use with some other libraries too)
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -195,3 +227,10 @@ STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY =  os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = '2024-06-20'
 STRIPE_WEBHOOK_SECRET = 'whsec_8f872f35c56a9b328cbfa12585b5ce0f6878539519cf6fba70928642f7ed07fe'
+
+SPECTACULAR_SETTINGS = {
+'TITLE': 'product_app API',
+'DESCRIPTION': 'An API for product_app',
+'VERSION': '1.0.0',
+'SERVE_INCLUDE_SCHEMA': False,
+}

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Product, Category, Comment
+from .models import Product, Comment
 
 
 class CommentInline(admin.TabularInline):
@@ -14,5 +14,4 @@ class ProductAdmin(admin.ModelAdmin):
     ]
 
 admin.site.register(Product, ProductAdmin)
-admin.site.register(Category)
 

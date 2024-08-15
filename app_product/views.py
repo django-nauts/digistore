@@ -61,8 +61,7 @@ class ProductDetailView(DetailView):
 class ProductCreateView(LoginRequiredMixin, CreateView):
     model = Product
     template_name = 'app_product/product_create.html'
-    fields = ['category', 'title', 'description', 'image', 'price',
-			  'tags']
+    fields = ['title', 'description', 'image', 'price', 'tags']
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -72,8 +71,8 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 class ProductUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
     template_name = 'app_product/product_edit.html'
-    fields = ['category', 'title', 'slug', 'description', 'image',
-			  'price', 'tags']
+    fields = ['title', 'slug', 'description',
+			  'image','price', 'tags']
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -94,6 +93,17 @@ class ProductDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return obj.created_by == self.request.user
 
 
+# Show products with a specific category/tag
+class ProductCategoryView(ListView):
+    model = Product
+    template_name = 'app_product/product_category.html'
+    paginate_by = 6
+
+    def get_queryset(self):
+        tag_slug = self.kwargs.get('tag_slug')
+        return Product.objects.filter(tags__slug=tag_slug)
+
+
 class CommentGet(DetailView):
     model = Product
     template_name = "app_product/product_detail.html"
@@ -102,6 +112,7 @@ class CommentGet(DetailView):
         context = super().get_context_data(**kwargs)
         context["form"] = CommentForm()
         return context
+
 
 class CommentPost(SingleObjectMixin, FormView):
     model = Product
