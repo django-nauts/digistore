@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'app_product.apps.AppProductConfig',
     'app_dashboard.apps.AppDashboardConfig',
     'app_payment.apps.AppPaymentConfig',
+    'app_drf.apps.AppDrfConfig',
 
     # External apps
     'allauth',
@@ -56,6 +57,9 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'taggit',
+    'rest_framework',
+    'drf_spectacular',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -67,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # External moddleware
+    # External middleware
     "allauth.account.middleware.AccountMiddleware",
 ]
 
@@ -84,7 +88,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'app_cart.context_processors.cart'
+
+                # Internal context processor
+                'app_cart.context_processors.cart',
             ],
         },
     },
@@ -181,6 +187,26 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Digistore API',
+    'DESCRIPTION': 'Blog & Ecommerce Website',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ]
+}
+
 # Below 4 lines are added so our website work properly with allauth library(usually use with some other libraries too)
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
@@ -192,6 +218,6 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 # Stripe payment portal settings
 STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
-STRIPE_SECRET_KEY =  os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = '2024-06-20'
 STRIPE_WEBHOOK_SECRET = 'whsec_8f872f35c56a9b328cbfa12585b5ce0f6878539519cf6fba70928642f7ed07fe'

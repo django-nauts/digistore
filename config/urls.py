@@ -4,6 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app_home.urls')),
@@ -16,7 +17,7 @@ urlpatterns = [
     path('accounts/', include('allauth.socialaccount.urls')),
     path('dashboard/', include('app_dashboard.urls')),
     path('payment/', include('app_payment.urls')),
-
+    path('api/', include('app_drf.urls')),
 ]
 
 if settings.DEBUG:
