@@ -13,9 +13,8 @@ app_name = 'app_drf'
 # Create a router and register our ViewSets with it.
 router = DefaultRouter()
 
-# app_product
-router.register(r'product', views.ProductViewSet, basename='api_product')
-router.register(r'product/category', views.CategoryViewSet, basename='api_category')
+# app_account
+router.register(r'user', views.UserViewSet, basename='api_user')
 # app_blog
 router.register(r'post', views.PostViewSet, basename='api_post')
 # app_payment
@@ -32,5 +31,4 @@ urlpatterns = [
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
-
 ]

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<main class="main">
+  <div class="page-header text-center">
+    <div class="container">
+      <section class="main">
+          <div class="container">
+
+              <div class="main">
+				
+				<form method="post" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{ form.as_p }}
+				<input type="submit" value="Create">
+				</form>
+
+              </div>
+
+          </div>
+      </section>
+	  </div>
+	</main>
+
+{% endblock content %}
+

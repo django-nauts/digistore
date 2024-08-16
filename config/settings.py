@@ -38,14 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
 
     # Internal apps
-    'app_home.apps.AppHomeConfig',
     'app_account.apps.AppAccountConfig',
+    'app_home.apps.AppHomeConfig',
     'app_blog.apps.AppBlogConfig',
     'app_cart.apps.AppCartConfig',
     'app_site_setting.apps.AppSiteSettingConfig',
     'app_product.apps.AppProductConfig',
+    'api_product.apps.ApiProductConfig',
     'app_dashboard.apps.AppDashboardConfig',
     'app_payment.apps.AppPaymentConfig',
     'app_drf.apps.AppDrfConfig',
@@ -57,9 +59,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
     'taggit',
-    'rest_framework',
-    'drf_spectacular',
     'rest_framework_simplejwt',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -73,7 +79,15 @@ MIDDLEWARE = [
 
     # External middleware
     "allauth.account.middleware.AccountMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
+
+CORS_ORIGIN_WHITELIST = (
+    'http://localhost:8000',
+    'https://localhost:8000',
+)
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://localhost:8000', ]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -91,6 +105,7 @@ TEMPLATES = [
 
                 # Internal context processor
                 'app_cart.context_processors.cart',
+
             ],
         },
     },
@@ -187,9 +202,6 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
 
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Digistore API',
@@ -204,8 +216,11 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
 }
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Below 4 lines are added so our website work properly with allauth library(usually use with some other libraries too)
 SITE_ID = 1
@@ -221,3 +236,4 @@ STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
 STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = '2024-06-20'
 STRIPE_WEBHOOK_SECRET = 'whsec_8f872f35c56a9b328cbfa12585b5ce0f6878539519cf6fba70928642f7ed07fe'
+

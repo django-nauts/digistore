@@ -1,7 +1,17 @@
 from django.contrib import admin
 
-from .models import Product, Category
-# Register your models here.
+from .models import Product, Comment
 
-admin.site.register(Product)
-admin.site.register(Category)
+
+class CommentInline(admin.TabularInline):
+    model = Comment
+    extra = 0
+
+
+class ProductAdmin(admin.ModelAdmin):
+    inlines = [
+        CommentInline,
+    ]
+
+admin.site.register(Product, ProductAdmin)
+

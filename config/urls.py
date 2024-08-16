@@ -4,11 +4,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('app_home.urls')),
     path('app-account/', include('app_account.urls')),
+    path('', include('app_home.urls')),
     path('setting/', include('app_site_setting.urls')),
     path('blog/', include('app_blog.urls')),
     path('product/', include('app_product.urls')),
@@ -18,6 +17,11 @@ urlpatterns = [
     path('dashboard/', include('app_dashboard.urls')),
     path('payment/', include('app_payment.urls')),
     path('api/', include('app_drf.urls')),
+	path('apip/', include('api_product.urls')),
+	# path('api-auth/', include('rest_framework.urls')),
+	# path('api/dj-rest-auth/', include('dj_rest_auth.urls')),
+	# path('api/dj-rest-auth/registration/',
+	# 	 include('dj_rest_auth.registration.urls')),
 ]
 
 if settings.DEBUG:

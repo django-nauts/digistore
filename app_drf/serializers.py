@@ -1,11 +1,25 @@
 from rest_framework import serializers
 
+from app_account.models import User
 from app_blog.models import Post, Comment
 from app_payment.models import ShippingAddress, Order, OrderItem
-from app_product.models import Product, Category
+
+
+# from app_product.models import Product, Category
 
 
 
+
+
+# region app_account
+class UserSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User
+        exclude = ('password',)
+
+
+# endregion
 
 # region app_blog
 
@@ -47,22 +61,22 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = '__all__'
 
-
 # endregion
 
 
 # region app_product
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = '__all__'
-
-
-class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer()
-
-    class Meta:
-        model = Product
-        fields = '__all__'
-
+# class CategorySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Category
+#         fields = '__all__'
+#
+#
+# class ProductSerializer(serializers.ModelSerializer):
+#     category = CategorySerializer()
+#
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
+#
 # endregion
+

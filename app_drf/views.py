@@ -1,28 +1,53 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
-from rest_framework.decorators import action
+from rest_framework.decorators import action, authentication_classes, permission_classes
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
+from app_account.models import User
 from app_blog.models import Post
 from app_payment.models import Order, ShippingAddress
-from app_product.models import Product, Category
-# Create your views here.
-from .serializers import ProductSerializer, CategorySerializer, PostSerializer, OrderSerializer, \
-    ShippingAddressSerializer
+from .permissions import IsAuthor, IsSuperUserOrStaffReadOnly, IsUserOrSuperUser
+from .serializers import PostSerializer, OrderSerializer, \
+    ShippingAddressSerializer, UserSerializer
 
+
+# Create your views here.
+
+
+# region app_account
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    permission_classes = [IsSuperUserOrStaffReadOnly]
+
+
+# endregion
 
 # region app_payment
 
 class OrderViewSet(viewsets.ViewSet):
     queryset = Order.objects.all()
 
+    @extend_schema(request=OrderSerializer, responses={201: OrderSerializer}, description='Display your order/s')
+    @permission_classes([IsUserOrSuperUser])
     def list(self, request):
-        serializer = OrderSerializer(self.queryset.filter(user_id=request.user.id, is_paid=True), many=True)
+        if request.user.is_superuser:
+            serializer = OrderSerializer(self.queryset.filter(is_paid=True), many=True)
+        else:
+            serializer = OrderSerializer(self.queryset.filter(user_id=request.user.id, is_paid=True), many=True)
         return Response(serializer.data)
 
+    @permission_classes([IsUserOrSuperUser])
+    @extend_schema(request=OrderSerializer, responses={201: OrderSerializer}, description='Display order by ID no.')
     def retrieve(self, request, pk=None):
-        serializer = OrderSerializer(self.queryset.filter(user_id=request.user.id, pk=pk, is_paid=True), many=True)
+        if request.user.is_superuser:
+            serializer = OrderSerializer(self.queryset.filter(pk=pk, is_paid=True), many=True)
+        else:
+            serializer = OrderSerializer(self.queryset.filter(user_id=request.user.id, pk=pk, is_paid=True), many=True)
         return Response(serializer.data)
 
 
@@ -41,20 +66,26 @@ class ShippingAddressViewSet(viewsets.ViewSet):
 class PostViewSet(viewsets.ViewSet):
     queryset = Post.objects.all()
 
+    @extend_schema(request=PostSerializer, responses={201: PostSerializer}, description='Add a new post')
     def list(self, request):
         serializer = PostSerializer(self.queryset, many=True)
         return Response(serializer.data)
 
+    @extend_schema(request=PostSerializer, responses={201: PostSerializer}, description='Add a new post')
     def retrieve(self, request, pk=None):
         serializer = PostSerializer(self.queryset.filter(pk=pk), many=True)
         return Response(serializer.data)
 
+    # @action(detail=True, permission_classes=[IsAuthor])
+    @extend_schema(request=PostSerializer, responses={201: PostSerializer}, description='Add a new post')
     def create(self, request):
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
+    @extend_schema(request=PostSerializer, responses={201: PostSerializer}, description='Add a new post')
+    @permission_classes([IsAuthor])
     def update(self, request, pk=None):
         post = Post.objects.get(pk=pk)
         serializer = PostSerializer(post, data=request.data)
@@ -63,40 +94,13 @@ class PostViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_202_ACCEPTED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    @permission_classes([IsAuthor])
     def destroy(self, request, pk=None):
         post = Post.objects.get(pk=pk)
         post.delete()
         return Response(None, status=status.HTTP_204_NO_CONTENT)
 
-
 # endregion
 
 # region app_product
-class ProductViewSet(viewsets.ViewSet):
-    queryset = Product.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        serializer = ProductSerializer(self.queryset, many=True)
-        return Response(serializer.data)
-
-    def retrieve(self, request, pk=None):
-        serializer = ProductSerializer(self.queryset.filter(pk=pk), many=True)
-        return Response(serializer.data)
-
-    @action(methods=['get'], detail=False, url_path=r'category/(?P<category>\w+)/all')
-    def list_product_by_category(self, request, category=None):
-        """
-        To list products by category
-        """
-        serializer = ProductSerializer(self.queryset.filter(category__name=category), many=True)
-        return Response(serializer.data)
-
-
-class CategoryViewSet(viewsets.ViewSet):
-    queryset = Category.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        serializer = CategorySerializer(self.queryset, many=True)
-        return Response(serializer.data)
-
 # endregion
