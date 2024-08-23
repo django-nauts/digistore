@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+12zx=j7d1d)(aqo(%ddb1(2+runz8=$7hn#j04=643fb%siz+'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$+y3*!y7y9=3h@vk3&y$)w8%b&@@6@%3(66lzrxh^28$2&ss%y')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 
@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'django_celery_beat',
     'taggit',
     'rest_framework_simplejwt',
     'rest_framework',
@@ -66,6 +67,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
     'drf_spectacular',
+
 ]
 
 MIDDLEWARE = [
@@ -146,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -202,7 +204,6 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
-
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Digistore API',
     'DESCRIPTION': 'Blog & Ecommerce Website',
@@ -237,3 +238,18 @@ STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = '2024-06-20'
 STRIPE_WEBHOOK_SECRET = 'whsec_8f872f35c56a9b328cbfa12585b5ce0f6878539519cf6fba70928642f7ed07fe'
 
+
+# Celery settings
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://guest:guest@rabbitmq:5672/')
+# CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://redis:6379/0')
+# Celery Settings
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/'  # or your broker URL
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # or your result backend
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Tehran'  # or your timezone
+
+# For django-celery-beat: This setting tells Celery Beat to use the Django database to store the schedule.
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
