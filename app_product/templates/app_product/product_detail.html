@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% load social_share %}
 
 {% block content %}
 
@@ -75,12 +75,13 @@
                             <h1 class="product-title">{{ product.title }}</h1>
                             <!-- End .product-title -->
 
-                            <div class="ratings-container">
-                                <div class="ratings">
-                                    <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                                </div><!-- End .ratings -->
-                                <a class="ratings-text" href="#product-review-link" id="review-link">({{ product.comment_set.count }})</a>
-                            </div><!-- End .rating-container -->
+							<div class="ratings-container">
+							    <div class="ratings">
+							        <div class="ratings-val" style="width: {{ average_rating }}%;"></div><!-- End .ratings-val -->
+							    </div><!-- End .ratings -->
+							    <a class="ratings-text" href="#product-review-link" id="review-link">({{ total_comments }})</a>
+							</div><!-- End .ratings-container -->
+
 
                             <div class="product-price">
                                 ${{ product.price }}
@@ -142,25 +143,39 @@
                                 </div><!-- End .details-action-wrapper -->
                             </div><!-- End .product-details-action -->
 
-                            <div class="product-details-footer">
+								<div class="social-icons social-icons-sm">
+								    <span class="social-label">Share:</span>
+								    <a href="https://www.facebook.com/sharer/sharer.php?u={{ object.get_absolute_url }}" class="social-icon" title="Share on Facebook" target="_blank">
+								        <i class="icon-facebook-f"></i>
+								    </a>
+								    <a href="https://twitter.com/intent/tweet?text=Check out this product!&url={{ object.get_absolute_url }}" class="social-icon" title="Share on Twitter" target="_blank">
+								        <i class="icon-twitter"></i>
+								    </a>
+								    <a href="https://www.instagram.com/" class="social-icon" title="Share on Instagram" target="_blank">
+								        <i class="icon-instagram"></i>
+								    </a>
+								    <a href="https://www.pinterest.com/pin/create/button/?url={{ object.get_absolute_url }}&media={{ object.image.url }}&description={{ object.title }}" class="social-icon" title="Share on Pinterest" target="_blank">
+								        <i class="icon-pinterest"></i>
+								    </a>
+								    <a href="https://t.me/share/url?url={{ object.get_absolute_url }}&text=Check out this product!" class="social-icon" title="Share on Telegram" target="_blank">
+								        <i class="icon-telegram"></i>
+								    </a>
+								    <a href="https://api.whatsapp.com/send?text=Check out this product! {{ object.get_absolute_url }}" class="social-icon" title="Share on WhatsApp" target="_blank">
+								        <i class="icon-whatsapp"></i>
+								    </a>
+								</div>
+								<br>
+
                                 <div class="product-cat">
                                     <span>Category:</span>
 									{% for tag in product.tags.all %}
 									<a href="{% url 'app_product:product_category' tag_slug=tag.slug %}">{{ tag }}</a>
 									{% endfor %}
                                 </div><!-- End .product-cat -->
+								<br>
 
-                                <div class="social-icons social-icons-sm">
-                                    <span class="social-label">Share:</span>
-                                    <a href="#" class="social-icon" title="Facebook" target="_blank"><i
-                                            class="icon-facebook-f"></i></a>
-                                    <a href="#" class="social-icon" title="Twitter" target="_blank"><i
-                                            class="icon-twitter"></i></a>
-                                    <a href="#" class="social-icon" title="Instagram" target="_blank"><i
-                                            class="icon-instagram"></i></a>
-                                    <a href="#" class="social-icon" title="Pinterest" target="_blank"><i
-                                            class="icon-pinterest"></i></a>
-                                </div>
+								<div class="product-details-footer">
+
                             </div><!-- End .product-details-footer -->
                         </div><!-- End .product-details -->
                     </div><!-- End .col-md-6 -->
@@ -230,41 +245,48 @@
                     </div><!-- .End .tab-pane -->
                     <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
                          aria-labelledby="product-review-link">
-                        <div class="reviews">						  
-                        <h3>Reviews ({{ product.comment_set.count }})</h3>
-							
-					{% for comment in product.comment_set.all %}
-					<div class="review">							  
-					    <div class="row no-gutters">
-					        <div class="col-auto">
-					            <h4><a href="#">{{ comment.author }}</a></h4>
-					            <div class="ratings-container">
-					                <div class="ratings">
-					                    <div class="ratings-val" style="width: {{ comment.rating }}%;"></div>
-					                    <!-- End .ratings-val -->
-					                </div><!-- End .ratings -->
-					            </div><!-- End .ratings-container -->
-					            <span class="review-date">{{ comment.date }}</span>
-					        </div><!-- End .col -->
-					        <div class="col">
-					            <h4>{{ comment.title }}</h4>
-					
-					            <div class="review-content">
-					                <p>{{ comment }}</p>
-					            </div><!-- End .review-content -->
-					
-					            <div class="review-action">
-					                <a href="#"><i class="icon-thumbs-up"></i>Helpful ({{ comment.helpful_count }})</a>
-					                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful ({{ comment.unhelpful_count }})</a>
-					            </div><!-- End .review-action -->
-					        </div><!-- End .col -->
-					    </div><!-- End .row -->
-					</div><!-- End .review -->
-					{% endfor %}
-						<form action="" method="post">{% csrf_token %}
-						{{ form }}
-						<button type="Post">Save</button>
-						</form>					
+					  
+						<div class="reviews">						  
+						    <h3>Reviews ({{ product.comment_set.count }})</h3>
+						    
+						    {% for comment in product.comment_set.all %}
+						    <div class="review">							  
+						        <div class="row no-gutters">
+						            <div class="col-auto">
+						                <h4><a href="#">{{ comment.author }}</a></h4>
+						                <div class="ratings-container">
+						                    <div class="ratings">
+						                        <div class="ratings-val" style="width: {{ comment.rating|floatformat:0|add:"0" }}0%;"></div>
+						                    </div><!-- End .ratings -->
+						                </div><!-- End .ratings-container -->
+						                <span class="review-date">{{ comment.date }}</span>
+						            </div><!-- End .col -->
+						            <div class="col">
+						                <h4>{{ comment.title }}</h4>
+						                <div class="review-content">
+						                    <p>{{ comment }}</p>
+						                </div><!-- End .review-content -->
+						                <div class="review-action">
+						                    <a href="#"><i class="icon-thumbs-up"></i>Helpful ({{ comment.helpful_count }})</a>
+						                    <a href="#"><i class="icon-thumbs-down"></i>Unhelpful ({{ comment.unhelpful_count }})</a>
+						                </div><!-- End .review-action -->
+						            </div><!-- End .col -->
+						        </div><!-- End .row -->
+						    </div><!-- End .review -->
+						    {% endfor %}
+						</div>
+					    
+						<div id="comments-section">
+						    {% include 'app_product/comments_list.html' with comments=product.comment_set.all %}
+						</div>
+						
+						<form id="comment-form" action="{% url 'app_product:comment_post' product.slug %}" method="post">
+						    {% csrf_token %}
+						    {{ form.as_p }}
+						    <button type="submit">Post Comment</button>
+						</form>
+					</div>
+
 
                     </div><!-- .End .tab-pane -->
                 </div><!-- End .tab-content -->
@@ -300,46 +322,43 @@
                             }
                         }'>
 
-{% for product in similar_products %}
-                <div class="product product-7 text-center">
-                    <figure class="product-media">
-                        <a href="{{ product.get_absolute_url }}">
-                            <img src="{{ product.image.url }}" alt="Product image"
-                                 class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#"
-                               class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview"
-                               title="Quick view"><span>Quick view</span></a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">{{ product.category | slice:"20" }}</a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title"><a href="{{ product.get_absolute_url }}">{{ product.title | slice:"100" }}</a></h3>
-                        <!-- End .product-title -->
-                        <div class="product-price">
-                            <span class="out-price">$ {{ product.price }}</span>
-                        </div><!-- End .product-price -->
-                        <div class="ratings-container">
-                            <div class="ratings">
-                                <div class="ratings-val" style="width: 80%;"></div><!-- End .ratings-val -->
-                            </div><!-- End .ratings -->
-                            <span class="ratings-text">( {{ product.comment_set.count }} Reviews )</span>
-                        </div><!-- End .rating-container -->
-                    </div><!-- End .product-body -->
-                </div><!-- End .product -->
-
+					{% for product in similar_products %}
+					    <div class="product product-7 text-center">
+					        <figure class="product-media">
+					            <a href="{{ product.get_absolute_url }}">
+					                <img src="{{ product.image.url }}" alt="Product image" class="product-image">
+					            </a>
+					
+					            <div class="product-action-vertical">
+					                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+					                <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+					                <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+					            </div><!-- End .product-action-vertical -->
+					
+					            <div class="product-action">
+					                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+					            </div><!-- End .product-action -->
+					        </figure><!-- End .product-media -->
+					
+					        <div class="product-body">
+					            <div class="product-cat">
+					                <a href="#">{{ product.category | slice:"20" }}</a>
+					            </div><!-- End .product-cat -->
+					            <h3 class="product-title"><a href="{{ product.get_absolute_url }}">{{ product.title | slice:"100" }}</a></h3>
+					            <!-- End .product-title -->
+					            <div class="product-price">
+					                <span class="out-price">$ {{ product.price }}</span>
+					            </div><!-- End .product-price -->
+					            <div class="ratings-container">
+					                <div class="ratings">
+					                    <div class="ratings-val" style="width: {{ product.average_rating|floatformat:0|add:"0" }}0%;"></div><!-- End .ratings-val -->
+					                </div><!-- End .ratings -->
+					                <span class="ratings-text">({{ product.comment_set.count }} Reviews)</span>
+					            </div><!-- End .ratings-container -->
+					        </div><!-- End .product-body -->
+					    </div><!-- End .product -->
 {% endfor %}
+
 
             </div><!-- End .owl-carousel -->
         </div><!-- End .container -->
@@ -371,6 +390,35 @@
             })
 
     })
+</script>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#comment-form').on('submit', function(e) {
+        e.preventDefault(); // Prevent the default form submission
+        $.ajax({
+            type: 'POST',
+            url: $(this).attr('action'), // The URL to send the request to
+            data: $(this).serialize(), // Serialize the form data
+            success: function(response) {
+                if (response.success) {
+                    // Update the comments section with the new comments
+                    $('#comments-section').html(response.comments_html);
+                    // Optionally, clear the form fields
+                    $('#comment-form')[0].reset();
+                } else {
+                    // Handle errors (e.g., display them)
+                    alert('Error: ' + JSON.stringify(response.errors));
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(error);
+            }
+        });
+    });
+});
 </script>
 
 

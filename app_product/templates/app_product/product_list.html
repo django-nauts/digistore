@@ -31,7 +31,7 @@
                 			<div class="toolbox">
                 				<div class="toolbox-left">
                 					<div class="toolbox-info">
-                						Showing <span>9 of 56</span> Products
+                						<p>Showing {{ current_page_products }} of {{ total_products }} Products</p>
                 					</div><!-- End .toolbox-info -->
                 				</div><!-- End .toolbox-left -->
 
@@ -114,21 +114,22 @@
                                                 </div><!-- End .product-action -->
                                             </figure><!-- End .product-media -->
 
-                                            <div class="product-body">
-                                                <div class="product-cat">
-                                                    <a href="#">{{ product.category | slice:"20" }}</a>
-                                                </div><!-- End .product-cat -->
-                                                <h3 class="product-title"><a href="{{ product.get_absolute_url }}">{{ product.title | slice:"100" }}</a></h3><!-- End .product-title -->
-                                                <div class="product-price">
-                                                    $ {{ product.price }}
-                                                </div><!-- End .product-price -->
-                                                <div class="ratings-container">
-                                                    <div class="ratings">
-                                                        <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                                                    </div><!-- End .ratings -->
-                                                    <span class="ratings-text">( {{ product.comment_set.count }} Reviews )</span>
-                                                </div><!-- End .rating-container -->
-                                            </div><!-- End .product-body -->
+<div class="product-body">
+    <div class="product-cat">
+        <a href="#">{{ product.category | slice:"20" }}</a>
+    </div><!-- End .product-cat -->
+    <h3 class="product-title"><a href="{{ product.get_absolute_url }}">{{ product.title | slice:"100" }}</a></h3><!-- End .product-title -->
+    <div class="product-price">
+        $ {{ product.price }}
+    </div><!-- End .product-price -->
+    <div class="ratings-container">
+        <div class="ratings">
+            <div class="ratings-val" style="width: {{ product.average_rating_value|floatformat:0|add:"0" }}0%;"></div><!-- End .ratings-val -->
+        </div><!-- End .ratings -->
+        <span class="ratings-text">({{ product.total_comments }} Reviews)</span>
+    </div><!-- End .ratings-container -->
+</div><!-- End .product-body -->
+
                                         </div><!-- End .product -->
                                     </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
 									{% endfor %}

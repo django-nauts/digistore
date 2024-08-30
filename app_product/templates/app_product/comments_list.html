@@ -1,0 +1,25 @@
+{% for comment in comments %}
+<div class="review">							  
+    <div class="row no-gutters">
+        <div class="col-auto">
+            <h4><a href="#">{{ comment.author }}</a></h4>
+            <div class="ratings-container">
+                <div class="ratings">
+                    <div class="ratings-val" style="width: {{ comment.rating|floatformat:0 }}0%;"></div>
+                </div><!-- End .ratings -->
+            </div><!-- End .ratings-container -->
+            <span class="review-date">{{ comment.date }}</span>
+        </div><!-- End .col -->
+        <div class="col">
+            <h4>{{ comment.title }}</h4>
+            <div class="review-content">
+                <p>{{ comment }}</p>
+            </div><!-- End .review-content -->
+            <div class="review-action">
+                <a href="#"><i class="icon-thumbs-up"></i>Helpful ({{ comment.helpful_count }})</a>
+                <a href="#"><i class="icon-thumbs-down"></i>Unhelpful ({{ comment.unhelpful_count }})</a>
+            </div><!-- End .review-action -->
+        </div><!-- End .col -->
+    </div><!-- End .row -->
+</div><!-- End .review -->
+{% endfor %}

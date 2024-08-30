@@ -1,7 +1,8 @@
 from django.db import models
+from django.db.models import Avg
 from django.urls import reverse
-
 from django.template.defaultfilters import slugify
+
 from taggit.managers import TaggableManager
 
 from app_account.models import User
@@ -32,11 +33,15 @@ class Product(models.Model):
             self.slug = slugify(self.title)
         return super().save(*args, **kwargs)
 
+    def average_rating(self):
+        return self.comment_set.aggregate(Avg('rating'))['rating__avg'] or 0
+
     
 class Comment(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     comment = models.CharField(max_length=140)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.comment
