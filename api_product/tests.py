@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from app_product.models import Product
 from .serializers import ProductSerializer, UserSerializer
 
-User = get_user_model()
+User: object = get_user_model()
 
 class UserAPITests(APITestCase):
     def setUp(self):

@@ -1,0 +1,8 @@
+.git
+.gitignore
+.docker
+.venv/
+venv/
+media/
+/media
+/media/

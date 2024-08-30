@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-+12zx=j7d1d)(aqo(%ddb1(2+runz8=$7hn#j04=643fb%siz+'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-$+y3*!y7y9=3h@vk3&y$)w8%b&@@6@%3(66lzrxh^28$2&ss%y')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 
@@ -38,18 +38,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-	'django.contrib.sites',
+    'django.contrib.sites',
 
     # Internal apps
-    'app_home.apps.AppHomeConfig',
     'app_account.apps.AppAccountConfig',
+    'app_home.apps.AppHomeConfig',
     'app_blog.apps.AppBlogConfig',
     'app_cart.apps.AppCartConfig',
     'app_site_setting.apps.AppSiteSettingConfig',
     'app_product.apps.AppProductConfig',
-	'api_product.apps.ApiProductConfig',
+    'api_product.apps.ApiProductConfig',
     'app_dashboard.apps.AppDashboardConfig',
     'app_payment.apps.AppPaymentConfig',
+    'app_drf.apps.AppDrfConfig',
 
     # External apps
     'allauth',
@@ -57,27 +58,17 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.github',
+    'django_celery_beat',
     'taggit',
-	'rest_framework',
-	'rest_framework.authtoken',
-	'corsheaders',
-	'dj_rest_auth',
-	'dj_rest_auth.registration',
-	'drf_spectacular',
+    'rest_framework_simplejwt',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
+    'drf_spectacular',
 	'django_social_share',
 ]
-
-REST_FRAMEWORK = {
-	'DEFAULT_PERMISSION_CLASSES': [
-		# Only admins/superusers can access API pages
-		'rest_framework.permissions.IsAdminUser',
-	],
-	'DEFAULT_AUTHENTICATION_CLASSES': [
-		'rest_framework.authentication.SessionAuthentication',
-		'rest_framework.authentication.BasicAuthentication',
-	],
-	'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -88,17 +79,17 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    # External moddleware
+    # External middleware
     "allauth.account.middleware.AccountMiddleware",
-	'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ORIGIN_WHITELIST = (
-	'http://localhost:8000',
-	'https://localhost:8000',
+    'http://localhost:8000',
+    'https://localhost:8000',
 )
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://localhost:8000',]
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', 'https://localhost:8000', ]
 
 ROOT_URLCONF = 'config.urls'
 
@@ -113,9 +104,10 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-				'django.template.context_processors.request',
-				
-                'app_cart.context_processors.cart'
+
+                # Internal context processor
+                'app_cart.context_processors.cart',
+
             ],
         },
     },
@@ -156,7 +148,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tehran'
 
 USE_I18N = True
 
@@ -212,6 +204,23 @@ SOCIALACCOUNT_PROVIDERS = {
     },
 }
 
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Digistore API',
+    'DESCRIPTION': 'Blog & Ecommerce Website',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+
+}
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Below 4 lines are added so our website work properly with allauth library(usually use with some other libraries too)
@@ -225,13 +234,22 @@ ACCOUNT_LOGOUT_ON_GET = True
 
 # Stripe payment portal settings
 STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY")
-STRIPE_SECRET_KEY =  os.environ.get("STRIPE_SECRET_KEY")
+STRIPE_SECRET_KEY = os.environ.get("STRIPE_SECRET_KEY")
 STRIPE_API_VERSION = '2024-06-20'
 STRIPE_WEBHOOK_SECRET = 'whsec_8f872f35c56a9b328cbfa12585b5ce0f6878539519cf6fba70928642f7ed07fe'
 
-SPECTACULAR_SETTINGS = {
-'TITLE': 'product_app API',
-'DESCRIPTION': 'An API for product_app',
-'VERSION': '1.0.0',
-'SERVE_INCLUDE_SCHEMA': False,
-}
+
+# Celery settings
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'redis://redis:6379/0')
+# CELERY_BROKER_URL = os.environ.get('CELERY_BROKER', 'amqp://guest:guest@rabbitmq:5672/')
+# CELERY_RESULT_BACKEND = os.environ.get('CELERY_BACKEND', 'redis://redis:6379/0')
+# Celery Settings
+CELERY_BROKER_URL = 'amqp://guest:guest@rabbitmq:5672/'  # or your broker URL
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # or your result backend
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Tehran'  # or your timezone
+
+# For django-celery-beat: This setting tells Celery Beat to use the Django database to store the schedule.
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
